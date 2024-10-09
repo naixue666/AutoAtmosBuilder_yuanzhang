@@ -743,6 +743,9 @@ Edizon-SE
 MissionControl
 sys-con
 DBI 647 中文版
+大气层版本：$atmosphere_name+$hekate_name
+大气层构建日期：$GITHUB_ENV
+淘宝店铺链接：https://shop101905175.taobao.com/
 ENDOFFILE
 
 ### Fetch lastest Zing from https://github.com/tomvita/Zing/releases/latest
@@ -818,9 +821,6 @@ fi
 
 # 写入到 "千叶奈雪自动构建.txt" 文件中
 cat ../description.txt > 院长.txt << ENDOFFILE
-大气层版本：$atmosphere_name+$hekate_name
-大气层构建日期：$GITHUB_ENV
-淘宝店铺链接：https://shop101905175.taobao.com/
 ENDOFFILE
 if [ $? -ne 0 ]; then
     echo "Writing 院长.txt\033[31m failed\033[0m."
