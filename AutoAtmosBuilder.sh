@@ -818,7 +818,9 @@ fi
 
 # 写入到 "千叶奈雪自动构建.txt" 文件中
 cat ../description.txt > 院长.txt << ENDOFFILE
-$atmosphere_name+$hekate_name
+大气层版本：$atmosphere_name+$hekate_name
+大气层构建日期：$GITHUB_ENV
+淘宝店铺链接：https://shop101905175.taobao.com/
 ENDOFFILE
 if [ $? -ne 0 ]; then
     echo "Writing 院长.txt\033[31m failed\033[0m."
@@ -856,7 +858,7 @@ ENDOFFILE
 
 ### Delete reboot_to_payload.nro & reboot_to_hekate.nro
 rm switch/reboot_to_payload.nro
-rm switch/sys-clk-manager.nro
+# rm switch/sys-clk-manager.nro
 # -------------------------------------------
 
 echo ""
