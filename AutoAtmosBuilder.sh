@@ -727,11 +727,9 @@ fi
 
 ###
 cat >> ../description.txt << ENDOFFILE
-Tinfoil-17v3
 ovlloader
 ovlmenu
 ovl-sysmodules
-linkalho
 EdiZon
 StatusMonitor
 sys-clk
@@ -743,6 +741,7 @@ Edizon-SE
 MissionControl
 sys-con
 DBI 647 中文版
+linkalho
 ENDOFFILE
 
 ### Fetch lastest Zing from https://github.com/tomvita/Zing/releases/latest
