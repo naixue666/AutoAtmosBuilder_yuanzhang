@@ -82,6 +82,46 @@ else
     unzip -oq bootloader.zip
     rm bootloader.zip
 fi
+
+# 如果不是预发布版本，下载 MissionControl 和 ldn_mitm
+if [ "$is_prerelease" = "true" ]; then
+    echo "Latest Atmosphere release is a pre-release, skipping MissionControl and ldn_mitm downloads."
+    echo "检测到当前 Atmosphere 版本为预发布版本，已跳过 MissionControl 和 ldn_mitm 的下载步骤。"
+else
+    echo "Detected that the current Atmosphere version is a stable release. Starting the download of MissionControl and ldn_mitm."
+    echo "检测到当前 Atmosphere 版本为正式版本，已开始 MissionControl 和 ldn_mitm 的下载步骤。"
+    # ### Fetch latest MissionControl from https://api.github.com/repos/ndeadly/MissionControl/releases/latest
+    curl -sL https://api.github.com/repos/ndeadly/MissionControl/releases/latest \
+      | jq '.tag_name' \
+      | xargs -I {} echo MissionControl {} >> ../description.txt
+    curl -sL https://api.github.com/repos/ndeadly/MissionControl/releases/latest \
+      | jq '.assets' | jq '.[0].browser_download_url' \
+      | xargs -I {} curl -sL {} -o MissionControl.zip
+    if [ $? -ne 0 ]; then
+        echo "MissionControl download\033[31m failed\033[0m."
+    else
+        echo "MissionControl download\033[32m success\033[0m."
+        unzip -oq MissionControl.zip
+        rm MissionControl.zip
+    fi
+
+    # ### Fetch latest ldn_mitm from https://api.github.com/repos/spacemeowx2/ldn_mitm/releases/latest
+    curl -sL https://api.github.com/repos/spacemeowx2/ldn_mitm/releases/latest \
+      | jq '.tag_name' \
+      | xargs -I {} echo ldn_mitm {} >> ../description.txt
+    curl -sL https://api.github.com/repos/spacemeowx2/ldn_mitm/releases/latest \
+      | jq '.assets' | jq '.[0].browser_download_url' \
+      | xargs -I {} curl -sL {} -o ldn_mitm.zip
+    if [ $? -ne 0 ]; then
+        echo "ldn_mitm download\033[31m failed\033[0m."
+    else
+        echo "ldn_mitm download\033[32m success\033[0m."
+        unzip -oq ldn_mitm.zip
+        rm ldn_mitm.zip
+    fi
+fi
+
+
 # ### Fetch latest MissionControl from https://api.github.com/repos/ndeadly/MissionControl/releases/latest
 # curl -sL https://api.github.com/repos/ndeadly/MissionControl/releases/latest \
 #   | jq '.tag_name' \
@@ -846,8 +886,6 @@ StatusMonitor
 sys-clk-overlay
 ReverseNX-RT
 fastcfwswitch
-ldn_mitm
-emuiibo
 QuickNTP
 Zing
 sys-patch
