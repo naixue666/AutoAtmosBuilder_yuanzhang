@@ -44,20 +44,37 @@ mkdir -p ./SwitchSD/config/tesla
 mkdir -p ./SwitchSD/config/Tesla-Menu/
 cd SwitchSD
 
-### Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases
-curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases \
-  | jq '.[0] | .name' \
-  | xargs -I {} echo {} >> ../description.txt
+#Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases
+is_prerelease=$(curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases \
+  | jq '.[0].prerelease')
 curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases \
   | jq '.[0].assets' | jq '.[0].browser_download_url' \
   | xargs -I {} curl -sL {} -o atmosphere.zip
+curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases \
+  | jq -r '.[0].assets[] | select(.name == "fusee.bin") | .browser_download_url' \
+  | xargs -I {} curl -sL {} -o fusee.bin
 if [ $? -ne 0 ]; then
     echo "atmosphere download\033[31m failed\033[0m."
 else
     echo "atmosphere download\033[32m success\033[0m."
     unzip -oq atmosphere.zip
     rm atmosphere.zip
+
+    # 获取最新的Atmosphere版本号并写入description.txt
+    curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases \
+      | jq '.[0] | .name' \
+      | xargs -I {} echo {} >> ../description.txt
 fi
+
+# curl -sL https://raw.github.com/naixue666/AutoAtmosBuilder/main/resources/atmosphere_1.8.0_test.zip -o atmosphere_1.8.0_test.zip
+# if [ $? -ne 0 ]; then
+#     echo "atmosphere_1.8.0_test download\033[31m failed\033[0m."
+# else
+#     echo "atmosphere_1.8.0_test download\033[32m success\033[0m."
+#     unzip -oq atmosphere_1.8.0_test.zip
+#     rm atmosphere_1.8.0_test.zip
+# fi
+
 ### Fetch latest Hekate + Nyx Chinese from https://github.com/easyworld/hekate/releases/latest
 curl -sL https://api.github.com/repos/easyworld/hekate/releases/latest \
   | jq '.name' \
@@ -71,16 +88,7 @@ else
     echo "Hekate + Nyx download\033[32m success\033[0m."
     unzip -oq hekate.zip
     rm hekate.zip
-fi
-
-### Fetch latest Bootloader-Resources from https://github.com/naixue233/SwitchScript
-curl -sL https://raw.github.com/naixue233/AutoAtmosBuilder_yuanzhang/main/resources/bootloader.zip -o bootloader.zip
-if [ $? -ne 0 ]; then
-    echo "Bootloader-Resources download\033[31m failed\033[0m."
-else
-    echo "Bootloader-Resources download\033[32m success\033[0m."
-    unzip -oq bootloader.zip
-    rm bootloader.zip
+    mv fusee.bin ./bootloader/payloads
 fi
 
 # 如果不是预发布版本，下载 MissionControl 和 ldn_mitm
@@ -167,7 +175,7 @@ else
     rm SaltyNX.zip
 fi
 
-curl -sL https://raw.github.com/naixue233/naixue_nx_atm_Auto_Script/main/resources/Tesla.zip -o Tesla.zip
+curl -sL https://raw.github.com/naixue666/AutoAtmosBuilder/main/resources/Tesla.zip -o Tesla.zip
 if [ $? -ne 0 ]; then
     echo "Tesla download\033[31m failed\033[0m."
 else
@@ -178,7 +186,7 @@ fi
 
 
 ### Fetch latest boot.dat-Resources from https://github.com/naixue233/SwitchScript
-curl -sL https://raw.github.com/naixue233/naixue_nx_atm_Auto_Script/main/resources/boot.dat -o boot.dat
+curl -sL https://raw.github.com/naixue666/AutoAtmosBuilder/main/resources/boot.dat -o boot.dat
 if [ $? -ne 0 ]; then
     echo "boot.dat-Resources download\033[31m failed\033[0m."
 else
@@ -350,14 +358,14 @@ fi
     #mv DBI.nro ./switch/DBI
 #fi
 
-curl -sL https://raw.github.com/naixue233/naixue_nx_atm_Auto_Script/main/resources/DBI.nro -o DBI.nro
+curl -sL https://raw.github.com/naixue666/AutoAtmosBuilder/main/resources/DBI.nro -o DBI.nro
 if [ $? -ne 0 ]; then
     echo "DBI.nro download\033[31m failed\033[0m."
 else
     echo "DBI.nro download\033[32m success\033[0m."
     mv DBI.nro ./switch/DBI
 fi
-curl -sL https://raw.github.com/naixue233/naixue_nx_atm_Auto_Script/main/resources/.DBI.nro.star -o .DBI.nro.star
+curl -sL https://raw.github.com/naixue666/AutoAtmosBuilder/main/resources/.DBI.nro.star -o .DBI.nro.star
 if [ $? -ne 0 ]; then
     echo ".DBI.nro.star download\033[31m failed\033[0m."
 else
@@ -556,7 +564,6 @@ updater2p=1
 [大气层虚拟系统]
 emummcforce=1
 fss0=atmosphere/package3
-kip1=atmosphere/kips/loader.kip
 icon=bootloader/res/icon_Atmosphere_emunand.bmp
 id=Atm-Emu
 {院长}
@@ -564,7 +571,6 @@ id=Atm-Emu
 [大气层真实系统]
 emummc_force_disable=1
 fss0=atmosphere/package3
-kip1=atmosphere/kips/loader.kip
 icon=bootloader/res/icon_Atmosphere_sysnand.bmp
 id=Atm-Sys
 {院长}
