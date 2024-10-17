@@ -184,6 +184,15 @@ else
     rm Tesla.zip
 fi
 
+### Fetch latest Bootloader-Resources from https://github.com/naixue666/SwitchScript
+curl -sL https://raw.github.com/naixue666/AutoAtmosBuilder/main/resources/bootloader.zip -o bootloader.zip
+if [ $? -ne 0 ]; then
+    echo "Bootloader-Resources download\033[31m failed\033[0m."
+else
+    echo "Bootloader-Resources download\033[32m success\033[0m."
+    unzip -oq bootloader.zip
+    rm bootloader.zip
+fi
 
 ### Fetch latest boot.dat-Resources from https://github.com/naixue233/SwitchScript
 curl -sL https://raw.github.com/naixue666/AutoAtmosBuilder/main/resources/boot.dat -o boot.dat
