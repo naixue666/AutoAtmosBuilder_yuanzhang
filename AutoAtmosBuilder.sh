@@ -793,7 +793,6 @@ emuiibo
 ldn_mitm
 fastcfwswitch
 Edizon-SE
-MissionControl
 sys-con
 DBI 647 中文版
 linkalho
