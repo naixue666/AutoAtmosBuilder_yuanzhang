@@ -574,6 +574,7 @@ updater2p=1
 emummcforce=1
 fss0=atmosphere/package3
 icon=bootloader/res/icon_Atmosphere_emunand.bmp
+kip1patch=nosigchk
 id=Atm-Emu
 {院长}
 
@@ -581,6 +582,7 @@ id=Atm-Emu
 emummc_force_disable=1
 fss0=atmosphere/package3
 icon=bootloader/res/icon_Atmosphere_sysnand.bmp
+kip1patch=nosigchk
 id=Atm-Sys
 {院长}
 
